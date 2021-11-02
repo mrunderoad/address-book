@@ -6,3 +6,8 @@ column {
   float: left;
   margin: 20px;
 }
+
+body {
+  background-image: url();
+  object-fit: cover;
+}

@@ -36,13 +36,17 @@ function Address(address, work, email) {
 }
 
 // Business Logic for Contacts ---------
-function Contact(firstName, lastName, phoneNumber, email, address) {
+function Contact(firstName, lastName, phoneNumber, addresses) {
   this.firstName = firstName;
   this.lastName = lastName;
   this.phoneNumber = phoneNumber;
-  this.email = email;  
-  this.address = address;
+  this.addresses = {};
 }
+
+function addAddress(address, id) {
+  console.log(address);
+  
+};
 
 Contact.prototype.fullName = function() {
   return this.firstName + " " + this.lastName;
@@ -74,6 +78,9 @@ function showContact(contactId) {
   let buttons = $("#buttons");
   buttons.empty();
   buttons.append("<button class='deleteButton' id=" +  + contact.id + ">Delete</button>");
+  let button2 = $("#button2");
+  button2.empty();
+  button2.append("<button class='addressButton' id=" +  + contact.id + ">Add Address</button>");
 }
 
 function attachContactListeners() {
@@ -84,6 +91,14 @@ function attachContactListeners() {
     addressBook.deleteContact(this.id);
     $("#show-contact").hide();
     displayContactDetails(addressBook);
+  });
+  $("#button2").on("click", ".addressButton", function() {
+    let address = $("input#new-first-name").val();
+    let email = $("input:radio[name=email]:checked").val();
+    let work = $("input:radio[name=work]:checked").val();
+    var newAddress = new Address(address, work, email);
+    console.log(newAddress);
+    addAddress(address, this.id);
   });
 }
 
@@ -101,7 +116,7 @@ $(document).ready(function() {
     $("input#new-phone-number").val("");
     $("input#new-email").val("");
     $("input#new-address").val("");
-    var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedEmail, inputtedAddress);
+    var newContact = new Contact(inputtedFirstName, inputtedLastName,inputtedPhoneNumber, inputtedEmail, inputtedAddress);
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
   });
@@ -113,6 +128,8 @@ $(document).ready(function() {
     $("input#address").val("");
     $("input#work").val("");
     $("input#email").val("");
-
+    var updatedContact = new Address(inputtedAddress, inputtedWork,inputtedEmail);
+    addAddress(updatedContact);
+    displayContactDetails(addressBook);
   });
 });
